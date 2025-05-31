@@ -29,15 +29,12 @@ public class CartItem {
     public CartItem() {
     }
 
-    // Wygodny konstruktor
     public CartItem(UUID productId, int quantity, BigDecimal priceAtAddition) {
         this.id = UUID.randomUUID();
         this.productId = productId;
         this.quantity = quantity;
         this.priceAtAddition = priceAtAddition;
     }
-
-    // Gettery i Settery
 
     public UUID getId() {
         return id;

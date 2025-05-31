@@ -24,11 +24,9 @@ public class Cart {
     @Column(name = "version")
     private Long version;
 
-    // Konstruktor bezargumentowy wymagany przez JPA
     public Cart() {
     }
 
-    // Wygodny konstruktor do utworzenia nowego koszyka
     public Cart(UUID userId) {
         this.id = UUID.randomUUID();
         this.userId = userId;
@@ -38,8 +36,6 @@ public class Cart {
     // Relacja One-to-Many: JEDEN koszyk – WIELE pozycji
     @OneToMany(mappedBy = "cart", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<CartItem> items = new ArrayList<>();
-
-    // Gettery i Settery
 
     public UUID getId() {
         return id;
