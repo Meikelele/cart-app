@@ -1,0 +1,22 @@
+version: "3.8"
+
+services:
+  product-db:
+    image: postgres:13-alpine
+    container_name: product-db
+    environment:
+      POSTGRES_USER: product_user
+      POSTGRES_PASSWORD: product_pass
+      POSTGRES_DB: product_db
+    ports:
+      - "5433:5432"
+    volumes:
+      - product-db-data:/var/lib/postgresql/data
+    networks:
+      - product-network
+
+volumes:
+  product-db-data:
+
+networks:
+  product-network:
