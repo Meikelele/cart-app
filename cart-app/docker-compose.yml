@@ -1,4 +1,22 @@
-FROM ubuntu:latest
-LABEL authors="michaelbak"
+version: "3.8"
 
-ENTRYPOINT ["top", "-b"]
+services:
+  db:
+    image: postgres:13-alpine
+    container_name: cart-db
+    environment:
+      POSTGRES_USER: mario
+      POSTGRES_PASSWORD: bros
+      POSTGRES_DB: cart_db
+    ports:
+      - "5432:5432"
+    volumes:
+      - db-data:/var/lib/postgresql/data
+    networks:
+      - cart-network
+
+volumes:
+  db-data:
+
+networks:
+  cart-network:
