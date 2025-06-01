@@ -2,6 +2,8 @@ package com.example.cartApp.model;
 
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
+
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -62,10 +64,23 @@ public class Cart {
     public List<CartItem> getItems() {
         return items;
     }
-
+    @Transient
+    private BigDecimal totalValue;
     public void addItem(CartItem item) {
         items.add(item);
         item.setCart(this);
+    }
+    public BigDecimal getTotalValue() {
+        if (items == null || items.isEmpty()) {
+            return BigDecimal.ZERO;
+        }
+        return items.stream()
+                .map(item -> item.getPriceAtAddition().multiply(BigDecimal.valueOf(item.getQuantity())))
+                .reduce(BigDecimal.ZERO, BigDecimal::add);
+    }
+
+    public void setTotalValue(BigDecimal totalValue) {
+        this.totalValue = totalValue;
     }
 
     public void removeItem(CartItem item) {
