@@ -1,5 +1,8 @@
 package com.example.cartApp.controller;
 
+/**
+ * DTO reprezentuje zadanie dodania produktu do koszyka
+ */
 public class AddProductRequest {
     private String productId;
     private int quantity;

@@ -3,6 +3,10 @@ package com.example.cartApp.model;
 import java.math.BigDecimal;
 import java.util.UUID;
 
+/**
+ * obiekt na dane przychodzace z product service
+ * posredniczy w wymainie meidzy Cart Service a Product Service
+ */
 public class ProductDto {
 
     private UUID id;

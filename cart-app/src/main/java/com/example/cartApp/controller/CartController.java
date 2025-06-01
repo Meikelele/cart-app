@@ -16,8 +16,7 @@ public class CartController {
     private final CartQueryService queryService;
 
     @Autowired
-    public CartController(CartCommandService commandService,
-                          CartQueryService queryService) {
+    public CartController(CartCommandService commandService, CartQueryService queryService) {
         this.commandService = commandService;
         this.queryService = queryService;
     }
@@ -48,14 +47,12 @@ public class CartController {
 
     /** Dodanie produktu do koszyka */
     @PostMapping("/{cartId}/items")
-    public ResponseEntity<String> addProduct(
-            @PathVariable String cartId,
-            @RequestBody AddProductRequest request) {
+    public ResponseEntity<String> addProduct(@PathVariable String cartId, @RequestBody AddProductRequest request) {
         try {
             UUID cId = UUID.fromString(cartId);
             UUID pId = UUID.fromString(request.getProductId());
             Cart updated = commandService.addProductToCart(cId, pId, request.getQuantity());
-            return ResponseEntity.status(201).body("Added, cart now has " + updated.getItems().size() + " items.");
+            return ResponseEntity.status(201).body("Success, koszyk ma teraz " + updated.getItems().size() + " produktow.");
         } catch (IllegalArgumentException e) {
             return ResponseEntity.badRequest().body("Bad request: " + e.getMessage());
         } catch (IllegalStateException e) {
@@ -67,14 +64,12 @@ public class CartController {
 
     /** Usunięcie produktu z koszyka */
     @DeleteMapping("/{cartId}/items/{productId}")
-    public ResponseEntity<String> removeProduct(
-            @PathVariable String cartId,
-            @PathVariable String productId) {
+    public ResponseEntity<String> removeProduct(@PathVariable String cartId, @PathVariable String productId) {
         try {
             UUID cId = UUID.fromString(cartId);
             UUID pId = UUID.fromString(productId);
             Cart updated = commandService.removeProductFromCart(cId, pId);
-            return ResponseEntity.ok("Removed, cart now has " + updated.getItems().size() + " items.");
+            return ResponseEntity.ok("Usunieto, koszyk ma teraz " + updated.getItems().size() + " produktow.");
         } catch (IllegalArgumentException e) {
             return ResponseEntity.badRequest().body("Bad request: " + e.getMessage());
         } catch (IllegalStateException e) {

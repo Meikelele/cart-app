@@ -12,6 +12,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import java.util.UUID;
 
+/**
+ * operacje modyfikujące stan koszyka
+ */
 @Service
 public class CartCommandServiceImpl implements CartCommandService {
 
@@ -26,6 +29,10 @@ public class CartCommandServiceImpl implements CartCommandService {
         this.productClient = productClient;
     }
 
+    /**
+     * Tworzy nowy koszyk dla podanego użytkownika,
+     * OPEN dla koszyka
+     */
     @Override
     @Transactional
     public Cart createCart(UUID userId) {
@@ -36,28 +43,28 @@ public class CartCommandServiceImpl implements CartCommandService {
 
     @Override
     @Transactional
+    /**
+     * Dodaje określoną ilość produktu do istniejącego koszyka
+     */
     public Cart addProductToCart(UUID cartId, UUID productId, int quantity) {
-        Cart cart = cartRepository.findById(cartId)
-                .orElseThrow(() -> new IllegalArgumentException("Koszyk nie znaleziony: " + cartId));
+        Cart cart = cartRepository.findById(cartId).orElseThrow(() -> new IllegalArgumentException("Koszyk nie znaleziony: " + cartId));
         if (cart.getStatus() != CartStatus.OPEN) {
             throw new IllegalStateException("Nie mozna dodac produktu do nie OPEN koszyka");
         }
 
-        // Pobierz szczegóły produktu z Product Service
+        // szczegóły produktu z Product Service
         ProductDto pdto = productClient.getProductById(productId);
 
-        // Sprawdź, czy w koszyku już jest CartItem z tym productId
+        // Jeśli pozycja już istnieje w koszyku, zwiększa jej ilość
         CartItem existing = cart.getItems().stream()
                 .filter(i -> i.getProductId().equals(productId))
                 .findFirst()
                 .orElse(null);
 
         if (existing != null) {
-            // Tylko aktualizujemy istniejący obiekt
             existing.setQuantity(existing.getQuantity() + quantity);
             cartItemRepository.save(existing);
         } else {
-            // Tworzymy zupełnie nowy obiekt ‒ Hibernate nada mu unikalne id
             CartItem newItem = new CartItem(productId, quantity, pdto.getPrice());
             newItem.setCart(cart);
             cart.getItems().add(newItem);
@@ -69,6 +76,9 @@ public class CartCommandServiceImpl implements CartCommandService {
 
     @Override
     @Transactional
+    /**
+     * Usuwa produkt z koszyka, jeśli koszyk ma status OPEN
+     */
     public Cart removeProductFromCart(UUID cartId, UUID productId) {
         Cart cart = cartRepository.findById(cartId)
                 .orElseThrow(() -> new IllegalArgumentException("Koszyka nie znaleziono o id: " + cartId));
@@ -88,6 +98,9 @@ public class CartCommandServiceImpl implements CartCommandService {
 
     @Override
     @Transactional
+    /**
+     * Finalizacja koszyka
+     */
     public Cart finalizeCart(UUID cartId) {
         Cart cart = cartRepository.findById(cartId).orElseThrow(() -> new IllegalArgumentException("Koszyka nie znaleziono o id: " + cartId));
         if (cart.getStatus() != CartStatus.OPEN) {

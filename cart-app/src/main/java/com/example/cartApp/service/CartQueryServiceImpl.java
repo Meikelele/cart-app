@@ -11,6 +11,9 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 import java.util.UUID;
 
+/**
+ * operacje odczytu danych koszyka
+ */
 @Service
 public class CartQueryServiceImpl implements CartQueryService {
 
@@ -25,11 +28,14 @@ public class CartQueryServiceImpl implements CartQueryService {
 
     @Override
     @Transactional(readOnly = true)
+    /**
+     * Pobiera koszyk o podanym identyfikatorze,
+     * pobiera nowa cene i nazwe jesli sie zmienila w product-service
+     */
     public Cart getCart(UUID cartId) {
         Cart cart = cartRepository.findById(cartId)
                 .orElseThrow(() -> new IllegalArgumentException("Koszyka nie znaleziono: " + cartId));
 
-        // Aktualizacja pozycji (pobranie nazwy i ceny dla każdej pozycji)
         for (CartItem item : cart.getItems()) {
             ProductDto pdto = productClient.getProductById(item.getProductId());
             item.setPriceAtAddition(pdto.getPrice());
@@ -40,6 +46,9 @@ public class CartQueryServiceImpl implements CartQueryService {
 
     @Override
     @Transactional(readOnly = true)
+    /**
+     * pobranie wszystkie koszyki dla zadanego usera
+     */
     public List<Cart> getUserCarts(UUID userId) {
         return cartRepository.findAllByUserId(userId);
     }

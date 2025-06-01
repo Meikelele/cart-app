@@ -10,6 +10,10 @@ import org.springframework.web.client.RestTemplate;
 
 import java.util.UUID;
 
+/**
+ * komunikacja z product-service
+ * pobieranie danych o produkcie na podstawie UUID
+ */
 @Component
 public class ProductClient {
 
@@ -23,7 +27,9 @@ public class ProductClient {
     }
 
     /**
-     * Wyciagam produkt po jego Id (jako String).
+     * zadanie GET do product-service,
+     * wyciagam dane po UUID
+     * deserializacja do dto
      */
     public ProductDto getProductById(UUID productId) {
         String url = productServiceUrl + "/" + productId;
