@@ -13,6 +13,10 @@ import java.util.UUID;
 public class DataInitializer {
 
     @Bean
+    /**
+     * Uruchamia si eprzy starcie apliakcji,
+     * Wstawia przykladowe produkty jesli tabela jest pusta
+     */
     public CommandLineRunner loadData(ProductRepository productRepository) {
         return args -> {
             if (productRepository.count() == 0) {
@@ -54,7 +58,7 @@ public class DataInitializer {
                 productRepository.save(p5);
                 productRepository.save(p6);
 
-                System.out.println(">>> wstawiam przykładowe produkty:");
+                System.out.println(">>> przykładowe produkty:");
                 System.out.println("    - " + p1.getName() + " (ID=" + p1.getId() + ")");
                 System.out.println("    - " + p2.getName() + " (ID=" + p2.getId() + ")");
                 System.out.println("    - " + p3.getName() + " (ID=" + p3.getId() + ")");
