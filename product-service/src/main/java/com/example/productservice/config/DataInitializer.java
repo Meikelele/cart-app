@@ -58,9 +58,9 @@ public class DataInitializer {
                 System.out.println("    - " + p1.getName() + " (ID=" + p1.getId() + ")");
                 System.out.println("    - " + p2.getName() + " (ID=" + p2.getId() + ")");
                 System.out.println("    - " + p3.getName() + " (ID=" + p3.getId() + ")");
-                System.out.println("    - " + p4.getName() + " (ID=" + p3.getId() + ")");
-                System.out.println("    - " + p5.getName() + " (ID=" + p3.getId() + ")");
-                System.out.println("    - " + p6.getName() + " (ID=" + p3.getId() + ")");
+                System.out.println("    - " + p4.getName() + " (ID=" + p4.getId() + ")");
+                System.out.println("    - " + p5.getName() + " (ID=" + p5.getId() + ")");
+                System.out.println("    - " + p6.getName() + " (ID=" + p6.getId() + ")");
             } else {
                 System.out.println(">>> tabela products nie jest pusta, nie wstaiwam danych");
             }
