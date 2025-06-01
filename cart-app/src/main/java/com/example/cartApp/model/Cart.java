@@ -1,5 +1,6 @@
 package com.example.cartApp.model;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -24,6 +25,10 @@ public class Cart {
     @Column(name = "version")
     private Long version;
 
+    // Relacja One-to-Many: JEDEN koszyk – WIELE pozycji
+    @OneToMany(mappedBy = "cart", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonManagedReference
+    private List<CartItem> items = new ArrayList<>();
     public Cart() {
     }
 
@@ -33,9 +38,6 @@ public class Cart {
         this.status = CartStatus.OPEN;
     }
 
-    // Relacja One-to-Many: JEDEN koszyk – WIELE pozycji
-    @OneToMany(mappedBy = "cart", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<CartItem> items = new ArrayList<>();
 
     public UUID getId() {
         return id;

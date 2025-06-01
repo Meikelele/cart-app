@@ -1,5 +1,6 @@
 package com.example.cartApp.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import java.math.BigDecimal;
 import java.util.UUID;
@@ -9,6 +10,7 @@ import java.util.UUID;
 public class CartItem {
 
     @Id
+    @GeneratedValue
     @Column(name = "id", nullable = false, updatable = false)
     private UUID id;
 
@@ -21,16 +23,27 @@ public class CartItem {
     @Column(name = "price_at_addition", nullable = false)
     private BigDecimal priceAtAddition;
 
+    @Transient
+    private String productName;
+
+    public String getProductName() {
+        return productName;
+    }
+
+    public void setProductName(String productName) {
+        this.productName = productName;
+    }
+
     // Relacja Many-to-One: wiele pozycji należy do jednego koszyka
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "cart_id", nullable = false)
+    @JsonBackReference
     private Cart cart;
 
     public CartItem() {
     }
 
     public CartItem(UUID productId, int quantity, BigDecimal priceAtAddition) {
-        this.id = UUID.randomUUID();
         this.productId = productId;
         this.quantity = quantity;
         this.priceAtAddition = priceAtAddition;
@@ -62,5 +75,9 @@ public class CartItem {
 
     public void setCart(Cart cart) {
         this.cart = cart;
+    }
+
+    public void setPriceAtAddition(BigDecimal priceAtAddition) {
+        this.priceAtAddition = priceAtAddition;
     }
 }
